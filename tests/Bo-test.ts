@@ -74,7 +74,7 @@ describe("perlin-sh", () => {
   
 
 
-  it("Is initialized!", async () => {
+  it.only("Is initialized!", async () => {
 
     //airdrop SOL to all the wallets
     const airdropSignature = await connection.requestAirdrop(
@@ -201,7 +201,7 @@ describe("perlin-sh", () => {
       tokenCreatorWalletATA.address
     )
 
-    const tokenAccountInfo2 = await getAccount(
+    let tokenAccountInfo2 = await getAccount(
       connection,
       subscriberWalletATA.address
     )
@@ -222,36 +222,41 @@ describe("perlin-sh", () => {
       connection, // connection
       subscriberWallet, // fee payer
       mint, // mint
-      tokenAccountInfo2.address, // token account
+      subscriberWalletATA.address, // token account
       agentWallet.publicKey, // delegate
       subscriberWallet, // owner of token account
       1e8, // amount, if your deciamls is 8, 10^8 for 1 token
       9 // decimals
     );
-    await connection.confirmTransaction(txhash);
+    //await connection.confirmTransaction(txhash);
 
-    console.log("txhash",txhash);
+    console.log("txhash approval",txhash);
     console.log("Subscriber token account info after delegation function", tokenAccountInfo2);
+    tokenAccountInfo2 = await getAccount(
+      connection,
+      subscriberWalletATA.address
+    )
+    console.log("SH:Subscriber token account info after delegation function", tokenAccountInfo2);
 
-    tokenAccountInfo2.delegate=agentWallet.publicKey;
+    //okenAccountInfo2.delegate=agentWallet.publicKey;
 
-    tokenAccountInfo2.delegatedAmount=BigInt(100000);
+    //tokenAccountInfo2.delegatedAmount=BigInt(100000);
     
     //console.log("testing delegated transfer")
     
     console.log("Subscriber token account info after delegation variable assignment", tokenAccountInfo2)
 
-    /*
+
     const signature9 = await transferChecked(
       connection,
-      Keypair.fromSecretKey(agentWallet.secretKey),
+      agentWallet,
       subscriberWalletATA.address,
       mint,
       merchantWalletATA.address,
       subscriberWallet.publicKey,
       5000,
       9
-    );*/
+    );
     
     //console.log(signature9);
 
@@ -262,7 +267,7 @@ describe("perlin-sh", () => {
 
     console.log('testing');
 
-    await program.methods.delegateApprove().accounts({
+    /*await program.methods.delegateApprove().accounts({
         //allowance: allowance.publicKey,
         //allowancePayer: subscriberWallet.publicKey,
         owner: subscriberWallet,
@@ -271,7 +276,7 @@ describe("perlin-sh", () => {
         tokenAccount: subscriberWalletATA.address,
         tokenProgram: mint,
         systemProgram: anchor.web3.SystemProgram.programId,
-    }).rpc();
+    }).rpc();*/
 
     console.log('testing2');
 
